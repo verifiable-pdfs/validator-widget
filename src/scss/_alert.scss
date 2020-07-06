@@ -1,0 +1,52 @@
+//
+// Base styles
+//
+
+.bc-alert {
+  position: relative;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-size: 1.2rem;
+  p{
+      font-size: 1rem;
+      margin-top: 5px;
+  }
+}
+
+// Headings for larger alerts
+.bc-alert-heading {
+  // Specified to prevent conflicts of changing $headings-color
+  color: inherit;
+}
+
+// Alternate styles
+//
+// Generate contextual modifier classes for colorizing the alert.
+.bc-alert-success{
+    *{
+      color: #155724;
+    }
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.bc-alert-warning{
+    *{
+      color: #997500;
+    }
+    color: #997500;
+    background-color: #f7da5c;
+    border-color: #c3e6cb;
+}
+
+.bc-alert-danger{
+    *{
+      color: #721c24;
+    }
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}

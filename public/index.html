@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Block.co embedded validator container project" />
+  <link rel="apple-touch-icon" href="logo192.png" />
+  <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <title>Block.co embedded validator</title>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <header style="background-color: rgb(8, 8, 17); padding: 5px 0 10px 0; text-align: center; ">
+    <h1 style="color: #e1e1e1;" class="display-4">Certificate validation</h1>
+  </header>
+  <div style="width: 900px; margin: 20px auto;">
+    <p>Block.co, a pioneer in Blockchain Credentialing applications, offers an open source platform to issue and verify
+      digital certificates in a completely decentralized way; i.e. with no dependencies to the issuing institution or
+      anyone else other than Bitcoin's blockchain. This site is a front-end of the open source verification software
+      that anyone can use to validate digital certificates. Certificates are issued as PDF files with special that
+      anchor them into the blockchain.</p>
+    <blockco-validator contact-name="Vasilis Tsiolkas" contact-email="tsiolkas.v@block.co" organization="Block.co"
+testnet="true" blockchain-services="{ &quot;requiredSuccesses&quot;: 1, &quot;services&quot;: [{ &quot;name&quot;: &quot;BTCD API&quot;, &quot;url&quot;: &quot;https://validator.block.co/api&quot; }] }"></blockco-validator>
+    <p style="margin-top: 25px;">Please note that the actual PDF of the certificate itself is not published to the
+      blockchain, but rather a fingerprint of the PDF, which is enough to validate that the exact document was indeed
+      published by the issuer and timestamped by Bitcoin’s blockchain.</p>
+  </div>
+  <!-- <script src="https://static.block.co/main.js"></script> -->
+  <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+</body>
+
+</html>

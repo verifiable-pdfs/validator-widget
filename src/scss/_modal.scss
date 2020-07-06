@@ -1,0 +1,219 @@
+// .ReactModal__Body--open,
+// .ReactModal__Html--open {
+//     overflow: hidden;
+// }
+
+// .bc-modal-open      - body class for killing the scroll
+// .bc-modal           - container to scroll within
+// .bc-modal-dialog    - positioning shell for the actual modal
+// .bc-modal-content   - actual modal w/ bg and corners and stuff
+
+
+.bc-modal-open {
+  // Kill the scroll on the body
+  overflow: hidden;
+
+  .bc-modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+// Container that the modal scrolls within
+.bc-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  // Prevent Chrome on Windows from adding a focus outline. For details, see
+  // https://github.com/twbs/bootstrap/pull/10951.
+  outline: 0;
+  // We deliberately don't use `-webkit-overflow-scrolling: touch;` due to a
+  // gnarly iOS Safari bug: https://bugs.webkit.org/show_bug.cgi?id=158342
+  // See also https://github.com/twbs/bootstrap/issues/17695
+}
+
+// Shell div to position the modal with bottom padding
+.bc-modal-dialog {
+  position: relative;
+  width: auto;
+  // allow clicks to pass through for custom click handling to close modal
+  pointer-events: none;
+
+  // When fading in the modal, animate it to slide down
+//   .bc-modal.fade & {
+//     @include transition($modal-transition);
+//     transform: $modal-fade-transform;
+//   }
+//   .bc-modal.show & {
+//     transform: $modal-show-transform;
+//   }
+
+//   // When trying to close, animate focus to scale
+//   .bc-modal.bc-modal-static & {
+//     transform: $modal-scale-transform;
+//   }
+}
+
+.bc-modal-dialog-scrollable {
+  display: flex; // IE10/11
+  max-height: 90vh;
+
+  .bc-modal-content {
+    max-height: 90vh;
+    overflow: hidden;
+  }
+
+  .bc-modal-header,
+  .bc-modal-footer {
+    flex-shrink: 0;
+  }
+
+  .bc-modal-body {
+    overflow-y: auto;
+  }
+}
+
+.bc-modal-dialog-centered {
+  display: flex;
+  align-items: center;
+//   min-height: 90vh;
+
+  // Ensure `modal-dialog-centered` extends the full height of the view (IE10/11)
+  &::before {
+    display: block; // IE10
+    // height: 90vh;
+    content: "";
+  }
+
+  // Ensure `.bc-modal-body` shows scrollbar (IE10/11)
+  &.bc-modal-dialog-scrollable {
+    flex-direction: column;
+    justify-content: center;
+    // height: 100%;
+
+    .bc-modal-content {
+      max-height: none;
+    }
+
+    &::before {
+      content: none;
+    }
+  }
+}
+
+// Actual modal
+.bc-modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%; // Ensure `.bc-modal-content` extends the full width of the parent `.bc-modal-dialog`
+  // counteract the pointer-events: none; in the .bc-modal-dialog
+  pointer-events: auto;
+  background-color: #FAFAFA;
+  background-clip: padding-box;
+  box-shadow: 1px 1px 5px #222;
+  border: none;
+  // Remove focus outline from opened modal
+  outline: 0;
+}
+
+// Modal background
+.bc-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+
+  // Fade for backdrop
+  &.fade { opacity: 0; }
+  &.show { opacity: 0.6; }
+}
+
+// Modal header
+// Top section of the modal w/ title and dismiss
+.bc-modal-header {
+  display: flex;
+  align-items: flex-start; // so the close btn always stays on the upper right corner
+  justify-content: space-between; // Put modal header elements (title and dismiss) on opposite ends
+  padding: 1rem;
+  border-bottom: 1px solid $gray-200;
+
+  .close {
+    padding: 1rem;
+    // auto on the left force icon to the right even when there is no .bc-modal-title
+    // margin: (-$modal-header-padding-y) (-$modal-header-padding-x) (-$modal-header-padding-y) auto;
+  }
+}
+
+// Title text within header
+.bc-modal-title {
+  margin-bottom: 0;
+//   line-height: $modal-title-line-height;
+}
+
+// Modal body
+// Where all modal content resides (sibling of .bc-modal-header and .bc-modal-footer)
+.bc-modal-body {
+  position: relative;
+  // Enable `flex-grow: 1` so that the body take up as much space as possible
+  // when there should be a fixed height on `.bc-modal-dialog`.
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+// Measure scrollbar width for padding body during modal show/hide
+.bc-modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+
+.bc-modal {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1000000;
+    * {
+      font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: #626262;
+    }
+}
+
+.bc-modal-dialog {
+    z-index: 1000001;
+    background-color: #FAFAFA;
+    margin: 0 auto;
+    margin-top: 5vh;
+    width: 95vw;
+    height: 100vh !important;
+}
+@media only screen and (max-width: 1024px) {
+.bc-modal-dialog {
+  width: 100%;
+  height: 100vh;
+}
+}
+
+.bc-modal-content {
+    height: 100%;
+}
+.bc-modal-body {
+    height: calc(100% - 133px);
+    padding: 0;
+}
+
+.ReactModal__Body--open,
+.ReactModal__Html--open {
+    overflow: hidden;
+}

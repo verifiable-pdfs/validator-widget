@@ -1,0 +1,133 @@
+$success: rgb(95, 185, 72);
+$warning: rgb(241, 192, 57);
+$danger: rgb(207, 90, 90);
+$gray-700: #666;
+$gray-200: #ccc;
+$text-muted: #999;
+
+@import "dropzone";
+@import "modal";
+@import "tooltip";
+@import "alert";
+
+.bc-text-center{
+    text-align: center;
+}
+.bc-text-muted *{
+    color: #666 !important;
+}
+.bc-text-success *{
+    color: #2a9e45 !important;
+}
+.bc-text-danger *{
+    color: #bd5c64 !important;
+}
+.bc-clearfix{
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}
+.bc-column{
+    box-sizing: border-box;
+    float: left;
+}
+.bc-col-left{
+    width: 30%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 1rem;
+}
+.bc-col-right{
+    width: 70%;
+    height: 100%;
+}
+@media only screen and (max-width: 900px) {
+.bc-col-left{
+    width: 100%;
+    height: auto;
+}
+.bc-col-right{
+    width: 100%;
+    height: auto;
+    min-height: 600px;
+}
+
+}
+
+
+.bc-inline-block{
+    display: inline-block;
+}
+
+.bc-help-icon{
+    padding: 0;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    svg > path {
+        color: rgb(52, 128, 241) !important;
+    }
+}
+.bc-key-val-container{
+    text-align: center;
+    padding: 0.35rem 0;
+}
+.bc-box-label{
+    font-size: 0.85rem;
+    font-weight: 300;
+}
+.bc-box-value{
+    margin-top: -5px;
+    font-size: 2rem;
+    font-weight: 300;
+}
+.bc-more-btn{
+    cursor: pointer;
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid #ccc;
+    &:hover{
+        background-color: #ddd;
+    }
+}
+.bc-table{
+    width: 100%;
+    border-collapse: collapse;
+    thead > tr > th{
+        padding: 0.5rem 0;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        text-align: center;
+        font-weight: 300;
+    }
+    tbody > tr > td{
+        padding: 0.6rem;
+        border-bottom: 1px solid #ccc;
+        text-align: center;
+    }
+    tbody > tr > td:first-child{
+        text-align: left;
+        background-color: #ececec;
+    }
+}
+
+.bc-btn{
+    // display: flex;
+    border-radius: 1000px;
+    border: none;
+    background-color: #dcdcdc;
+    padding: 10px;
+    cursor: pointer;
+    &:hover{
+        background-color: #adadad;
+    }
+    &.disabled{
+        background-color: #999;
+        cursor: default;
+        &:hover{
+            background-color: #999;
+        }
+    }
+}
