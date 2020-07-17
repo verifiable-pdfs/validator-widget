@@ -77,8 +77,6 @@ class App extends React.Component {
     }
 
     render() {
-        console.log('TESTNET', this.props.testnet);
-
         return (
             <div className="App">
                 {this.state.preError && (

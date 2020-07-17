@@ -36,11 +36,13 @@ export default function CoreValidator({
       const pdfJSDocument = await PDFJS.getDocument(
         pdfArrayBuffer
       ).promise.catch(err => {
+        console.error(err)
         throw new Error('Could not parse the PDF file.')
       })
 
       // Parse the PDF metadata from the PDFJS document
       const pdfJSMetadata = await pdfJSDocument.getMetadata().catch(err => {
+        console.error(err)
         throw new Error('Could not parse the PDF metadata.')
       })
 

@@ -77,8 +77,7 @@ const _checkIfKey = (metadataString, key, start, idx) => {
   }
 }
 
-const extractHash = async (pdfString, pdfJSMetadata) => {
-  console.log('Array from', Array.from)
+const extractHash = async (pdfString, pdfJSMetadata, removeOwnerProof=false) => {
   // We need to extract and empty the chainpoint_proof key from the pdf's docInfo
   // Format the metadata that pdf.js returns in the way that python's pdfrw 0.3
   // writes them, in order to produce the same hash
@@ -114,7 +113,7 @@ const extractHash = async (pdfString, pdfJSMetadata) => {
   lowerArray = lowerArray.sort((a, b) =>
     Object.keys(a)[0].localeCompare(Object.keys(b)[0])
   )
-  let metaKeys = upperArray.concat(lowerArray)
+  let metadataKeys = upperArray.concat(lowerArray)
 
   // Because sometimes PDFjs doesn't parse PDF Strings the same way as python pdfrw-0.3 does,
   // we'll use the values from the original pdfString for the key-value pairs
@@ -139,12 +138,14 @@ const extractHash = async (pdfString, pdfJSMetadata) => {
     metadataString = match[1].trim()
   }
 
+  const KEYS_TO_EMPTY = removeOwnerProof ? ['/chainpoint_proof', '/owner_proof'] : ['/chainpoint_proof']
+
   // Get the correct values from the original pdfString for the keys extracted with PDFjs
   let docInfoArray = []
   let prevIdx = 0
-  for (let i = 1; i < metaKeys.length; i++) {
-    const prevKey = `/${metaKeys[i - 1]}`
-    const key = `/${metaKeys[i]}`
+  for (let i = 1; i < metadataKeys.length; i++) {
+    const prevKey = `/${metadataKeys[i - 1]}`
+    const key = `/${metadataKeys[i]}`
     docInfoArray.push(prevKey)
     // Start looking for the first occurence after the previous found key
     prevIdx = metadataString.indexOf(prevKey, prevIdx)
@@ -152,14 +153,14 @@ const extractHash = async (pdfString, pdfJSMetadata) => {
 
     idx = _checkIfKey(metadataString, key, prevIdx + prevKey.length, idx)
 
-    // If it's chainpoint_proof, set it to empty before adding
-    const value = prevKey === '/chainpoint_proof' ? '()' : metadataString.slice(prevIdx + prevKey.length, idx).trim()
+    // If it's chainpoint_proof or owner or owner_proof, set it to empty before adding
+    const value = KEYS_TO_EMPTY.includes(prevKey) ? '()' : metadataString.slice(prevIdx + prevKey.length, idx).trim()
     docInfoArray.push(value)
 
-    if (i === metaKeys.length - 1) {
+    if (i === metadataKeys.length - 1) {
       // Add the last key and value
       docInfoArray.push(key)
-      const value = key === '/chainpoint_proof' ? '()' : metadataString.slice(idx + key.length).trim()
+      const value = key === KEYS_TO_EMPTY.includes(prevKey) ? '()' : metadataString.slice(idx + key.length).trim()
       docInfoArray.push(value)
     }
   }
@@ -209,10 +210,8 @@ const extractHash = async (pdfString, pdfJSMetadata) => {
   if (!crypto) {
     throw new Error('You are using an unsupported browser. Please use a modern browser like latest Chrome or Firefox.')
   }
-  console.log('crypto', crypto)
   const digest = await crypto.subtle.digest('SHA-256', uint)
-  console.log('digest', digest)
   return bytesToHex(new Uint8Array(digest))
 }
 
-export { ArrayBufferToString, extractHash }
+export { ArrayBufferToString, StringToArrayBuffer, extractHash }

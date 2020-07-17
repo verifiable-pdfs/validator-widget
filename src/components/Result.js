@@ -9,7 +9,7 @@ import {
 
 import HelpIcon from './HelpIcon'
 
-const IdentityObject = ({ address, issuer, txid, verifications }) => {
+const IdentityObject = ({ address, issuer, ownerResult, txid, verifications }) => {
   const [expandedDetails, setExpandedDetails] = useState(false)
 
   return (
@@ -17,10 +17,25 @@ const IdentityObject = ({ address, issuer, txid, verifications }) => {
       <div className="bc-key-val-container">
         <div className="bc-box-label">
           Issuer{' '}
-          <HelpIcon text="This is the name that the issuer of the certificate has selected to be displayed" />
+          <HelpIcon text="This is the name that the issuer of this certificate on the blockchain has selected to be displayed." />
         </div>
         <div className="bc-box-value">{issuer}</div>
       </div>
+      {ownerResult && (
+        <div className="bc-key-val-container">
+          <div className="bc-box-label">
+            Sub-issuer{' '}
+            <HelpIcon text="This is the name of the actual issuer of the certificate on behalf of whom  <br/>the issuer above issued on the blockchain.<br/>The issuer above vouches that the identity of the sub-issuer is valid." />
+          </div>
+          <div className="bc-box-value">{ownerResult.owner.name}</div>
+          {!ownerResult.ownerValid && (
+            <div className="bc-alert-danger">
+              The signature of the sub-issuer could not be validated.
+            </div>
+          )}
+        </div>
+      )}
+
       {verifications && (
         <div className="bc-key-val-container">
           <div className="bc-box-label">
@@ -194,6 +209,7 @@ const Result = ({ result, error, customText }) => {
               <IdentityObject
                 address={result.address}
                 issuer={result.issuer}
+                ownerResult={result.ownerResult}
                 txid={result.txid}
                 verifications={result.result.verification}
               />

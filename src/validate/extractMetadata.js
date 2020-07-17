@@ -4,19 +4,30 @@ const extractMetadata = async pdfInfo => {
   const pdfCustomMetadata = pdfInfo.info.Custom
   const chainpoint_proof = pdfCustomMetadata.chainpoint_proof
 
-  let version = pdfCustomMetadata.version
+  let version = String(pdfCustomMetadata.version)
   let issuer = pdfCustomMetadata.issuer
   let issuer_object,
     address,
     metadata_object,
     metadataString,
-    verificationMethods
-  if (version) {
+    verificationMethods,
+    owner,
+    ownerProof
+
+  if (version === '1') {
     issuer_object = JSON.parse(pdfCustomMetadata.issuer)
     issuer = issuer_object.name
     address = issuer_object.identity.address
     verificationMethods = issuer_object.identity.verification
     metadataString = pdfCustomMetadata.metadata
+  } else if (version === '2') {
+    issuer_object = JSON.parse(pdfCustomMetadata.issuer)
+    issuer = issuer_object.name
+    address = issuer_object.identity.address
+    verificationMethods = issuer_object.identity.verification
+    metadataString = pdfCustomMetadata.metadata
+    owner = JSON.parse(pdfCustomMetadata.owner)
+    ownerProof = pdfCustomMetadata.owner_proof
   } else {
     version = '0'
     address = pdfCustomMetadata.issuer_address
@@ -83,7 +94,9 @@ const extractMetadata = async pdfInfo => {
     verificationMethods,
     visible_metadata,
     txid,
-    chainpoint_proof_object
+    chainpoint_proof_object,
+    owner,
+    ownerProof
   }
 }
 

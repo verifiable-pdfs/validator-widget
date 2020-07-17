@@ -2,6 +2,7 @@ import validateIdentity from './validateIdentity'
 import revocationCheck from './revocationCheck'
 
 import validateReceipt from './validateReceipt'
+import validateOwner from './validateOwner'
 import queryBlockchainServices from './blockchainServices'
 import { ArrayBufferToString, extractHash } from './pdfUtils'
 import extractMetadata from './extractMetadata'
@@ -14,6 +15,7 @@ export default async function validate(
 ) {
   // Get our relevant metadata
   const metadata = await extractMetadata(pdfJSMetadata).catch(e => {
+    console.error(e)
     throw new Error('Could not extract the validation proof from the PDF file.')
   })
 
@@ -31,11 +33,12 @@ export default async function validate(
   // Get the raw PDF string from the reader event and
   // extract the hash after emptying the chainpointProof
   let pdfString = ArrayBufferToString(pdfArrayBuffer)
-  const hash = await extractHash(pdfString, pdfJSMetadata)
-  return await _validateInner(metadata, hash, blockchainServices, testnet)
+  return await _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServices, testnet)
 }
 
-async function _validateInner(metadata, PDFHash, blockchainServices, testnet) {
+async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServices, testnet) {
+  // Extract the hash (without emptying owner_proof)
+  let PDFHash = await extractHash(pdfString, pdfJSMetadata)
   let validationResult = {}
 
   // send address and txid and receive all the transactions that happened before and after the issuance
@@ -85,6 +88,18 @@ async function _validateInner(metadata, PDFHash, blockchainServices, testnet) {
       }
     }
 
+    // If it's version = '2' and owner is present, validate his pk as well
+    let ownerResult
+    if (metadata.version === '2' && metadata.owner && metadata.ownerProof) {
+      // Reextract the hash, now also removing owner_proof
+      PDFHash = await extractHash(pdfString, pdfJSMetadata, true)
+      const ownerValid = validateOwner(testnet, metadata, PDFHash)
+      ownerResult = {
+        ownerValid,
+        owner: metadata.owner
+      }
+    }
+
     validationResult = {
       address: metadata.address,
       issuer: metadata.issuer,
@@ -93,7 +108,11 @@ async function _validateInner(metadata, PDFHash, blockchainServices, testnet) {
       id_proofs,
       result
     }
+    if (ownerResult) {
+      validationResult.ownerResult = ownerResult
+    }
   } catch (e) {
+    console.error(e)
     throw new Error('Something went wrong while trying to verify this file.')
   }
 
