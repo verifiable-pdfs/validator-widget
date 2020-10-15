@@ -219,7 +219,7 @@ const Result = ({ result, error, customText }) => {
             </>
           ) : (
               <>
-                <div className="alert alert-danger text-center">
+                <div className="bc-alert bc-alert-danger bc-text-center">
                   <FontAwesomeIcon icon={faTimesCircle} /> Certificate{' '}
                   <strong>{result.filename}</strong> is not valid.
             {/* {result.result.reason && <p>{result.result.reason}</p>} */}

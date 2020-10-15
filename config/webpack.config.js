@@ -232,6 +232,17 @@ module.exports = function (webpackEnv) {
             },
             mangle: {
               safari10: true,
+              reserved: [
+                'Buffer',
+                'BigInteger',
+                'Point',
+                'ECPubKey',
+                'ECKey',
+                'sha512_asm',
+                'asm',
+                'ECPair',
+                'HDNode'
+              ]
             },
             // Added for profiling in devtools
             keep_classnames: isEnvProductionProfile,

@@ -70,7 +70,7 @@ export default function CoreValidator({
   return (
     <div className="core-validator" style={{ height: '100%', overflowY: 'none' }}>
       <div className="bc-clearfix" style={{ height: '100%' }}>
-        <div className="bc-column bc-col-left">
+        <div className="bc-column bc-col-left bc-text-center">
           {topDisplay}
           {loading ? (
             <Loader text="Validating certificate, please wait..." />
