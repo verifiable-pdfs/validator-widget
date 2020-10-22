@@ -26,7 +26,7 @@ const extractMetadata = async pdfInfo => {
     address = issuer_object.identity.address
     verificationMethods = issuer_object.identity.verification
     metadataString = pdfCustomMetadata.metadata
-    owner = JSON.parse(pdfCustomMetadata.owner)
+    owner = pdfCustomMetadata.owner ? JSON.parse(pdfCustomMetadata.owner) : undefined
     ownerProof = pdfCustomMetadata.owner_proof
   } else {
     version = '0'
