@@ -28,7 +28,7 @@ const revocationCheck = (valid, reason, transactions, metadata, PDFHash) => {
   }
 
   for (let i = 1; i < transactions.before.length; i++) {
-    let opData = parseOpReturnHex(transactions.before[i])
+    let opData = parseOpReturnHex(transactions.before[i].data)
     if (opData) {
       if (opData['cmd'] === operators['op_revoke_address']) {
         let p2pkh = address.fromBase58Check(issuerAddress)
@@ -44,7 +44,7 @@ const revocationCheck = (valid, reason, transactions, metadata, PDFHash) => {
 
   let reversedAfter = transactions.after.reverse()
   for (let opReturn of reversedAfter) {
-    let opData = parseOpReturnHex(opReturn)
+    let opData = parseOpReturnHex(opReturn.data)
     if (opData) {
       if (opData['cmd'] === operators['op_revoke_batch']) {
         if (cpTxid === opData['data']['txid']) {

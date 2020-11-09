@@ -15,56 +15,37 @@ const requestBlockcypher = async (address, before, testnet) => {
   return await request.get(address_txs_url, { params })
 }
 
-const splitBlockcypherTransactions = (transactions, txid) => {
+const splitTransactions = (transactions, txid, isBlockcypher=false) => {
   // separate transactions that made after the specific txid starting from the most recent
   // the first transaction with equal txid to our issuance is before[0]
   let before = []
   let after = []
   let foundIssuance = false
+  let timestamp
 
   for (let tx of transactions) {
     if (tx.confirmations <= 0) continue
 
-    if (tx.hash === txid) {
+    let txhash = isBlockcypher ? tx.hash : tx.txid
+    if (txhash === txid) {
       foundIssuance = true
+      // BTCDApi just returns a timestamp, we format it like blockcypher's response for comparing purposes
+      timestamp = isBlockcypher ? tx.confirmed : new Date(tx.blocktime * 1000).toISOString().replace('.000', '')
+    } else {
+      // We just want the timestamp for the actual tx that contains the issuance, set undefined for the rest
+      timestamp = undefined
     }
 
-    for (let o of tx.outputs) {
-      if (o.script.startsWith('6a')) {
-        let data = getOpReturnDataFromScript(o.script)
+    let outputs = isBlockcypher ? tx.outputs : tx.vout
+    for (let o of outputs) {
+      let script = isBlockcypher ? o.script : o.scriptPubKey.hex
+      if (script.startsWith('6a')) {
+        let data = isBlockcypher ? getOpReturnDataFromScript(o.script) : getOpReturnDataFromScript(o.scriptPubKey.hex)
+        let t = { data, timestamp }
         if (!foundIssuance) {
-          after.push(data)
+          after.push(t)
         } else {
-          before.push(data)
-        }
-      }
-    }
-  }
-
-  return { before, after }
-}
-
-const splitBTCDTransactions = (transactions, txid) => {
-  // separate ransactions that made after the specific txid starting from the most recent
-  // the first transaction with equal txid to our issuance is before[0]
-  let before = []
-  let after = []
-  let foundIssuance = false
-
-  for (let tx of transactions) {
-    if (tx.confirmations <= 0) continue
-
-    if (tx.txid === txid) {
-      foundIssuance = true
-    }
-
-    for (let o of tx.vout) {
-      if (o.scriptPubKey.hex.startsWith('6a')) {
-        let data = getOpReturnDataFromScript(o.scriptPubKey.hex)
-        if (!foundIssuance) {
-          after.push(data)
-        } else {
-          before.push(data)
+          before.push(t)
         }
       }
     }
@@ -121,7 +102,7 @@ const queryBlockcypher = async (address, txid, testnet) => {
     hasMore = res.data.hasMore
   }
 
-  return splitBlockcypherTransactions(transactions, txid)
+  return splitTransactions(transactions, txid, true)
 }
 
 const queryBTCDApi = async (BTCDUrl, address, txid, testnet) => {
@@ -145,7 +126,7 @@ const queryBTCDApi = async (BTCDUrl, address, txid, testnet) => {
     throw new Error(err)
   })
 
-  return splitBTCDTransactions(res.data, txid)
+  return splitTransactions(res.data, txid)
 }
 
 const queryBlockchainServices = async (blockchainServices, address, txid, testnet) => {
@@ -168,7 +149,7 @@ const queryBlockchainServices = async (blockchainServices, address, txid, testne
 
   const succesfulResults = results.map(r => r.value).filter(r => r)
 
-  if (succesfulResults.length > 1) {
+  if (succesfulResults.length > 1 && blockchainServices.requiredSuccesses > 1) {
     const orig = JSON.stringify(succesfulResults[0]);
     for (let i = 1; i < succesfulResults.length; i++) {
       const targ = JSON.stringify(succesfulResults[i]);

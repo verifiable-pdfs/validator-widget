@@ -9,7 +9,7 @@ import {
 
 import HelpIcon from './HelpIcon'
 
-const IdentityObject = ({ address, issuer, ownerResult, txid, verifications }) => {
+const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verifications }) => {
   const [expandedDetails, setExpandedDetails] = useState(false)
 
   return (
@@ -110,6 +110,11 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, verifications }) =
             <HelpIcon text="Transaction ID of the issuance on the blockchain" />
           </div>
           <div style={{ wordBreak: 'break-all' }}>{txid}</div>
+          <div className="bc-box-label" style={{ marginTop: '0.5rem' }}>
+            Block timestamp{' '}
+            <HelpIcon text="The moment that the block containing this issuance was mined in the Bitcoin" />
+          </div>
+          <div style={{ wordBreak: 'break-all' }}>{timestamp}</div>
         </div>
       ) : (
           <div className="bc-text-center" style={{ marginTop: '0.5rem' }}>
@@ -211,6 +216,7 @@ const Result = ({ result, error, customText }) => {
                 issuer={result.issuer}
                 ownerResult={result.ownerResult}
                 txid={result.txid}
+                timestamp={result.timestamp}
                 verifications={result.result.verification}
               />
               {Array.isArray(result.metadata) && result.metadata.length > 0 && (
@@ -222,7 +228,7 @@ const Result = ({ result, error, customText }) => {
                 <div className="bc-alert bc-alert-danger bc-text-center">
                   <FontAwesomeIcon icon={faTimesCircle} /> Certificate{' '}
                   <strong>{result.filename}</strong> is not valid.
-            {/* {result.result.reason && <p>{result.result.reason}</p>} */}
+                  {/* {result.result.reason && <p>{result.result.reason}</p>} */}
                   {result.result.expiry_date && (
                     <p>
                       It has expired at: <strong>{result.result.expiry_date}.</strong>

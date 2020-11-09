@@ -4,14 +4,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
-let rootEls = document.getElementsByTagName('blockco-validator');
+let rootEls = document.getElementsByTagName('vpdf-validator');
+
+if (!rootEls.length) {
+    rootEls = document.getElementsByTagName('blockco-validator');
+}
 
 if (rootEls.length) {
     const rootEl = rootEls[0];
     const contactName = rootEl.getAttribute("contact-name");
     const contactEmail = rootEl.getAttribute("contact-email");
     const org = rootEl.getAttribute("organization");
-    const testnet = rootEl.getAttribute("testnet") === 'true' ? true : false;
+    const testnet = rootEl.getAttribute("testnet") === 'true';
     const blockchainServicesAttr = rootEl.getAttribute('blockchain-services');
 
     let blockchainServices;

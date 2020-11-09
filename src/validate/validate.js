@@ -49,11 +49,13 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
     metadata.txid,
     testnet
   )
+  // Keep the timestamp to display if the certificate is valid after all
+  const timestamp = transactions.before[0].timestamp
   // Validate that the chainpoint proof is valid and the PDFHash is anchored to the blockchain
   try {
     let { valid, reason } = validateReceipt(
       metadata.chainpoint_proof_object,
-      transactions.before[0],
+      transactions.before[0].data,
       PDFHash
     )
     // Check for revocations
@@ -105,6 +107,7 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
       issuer: metadata.issuer,
       metadata: metadata.visible_metadata,
       txid: metadata.txid,
+      timestamp,
       id_proofs,
       result
     }
