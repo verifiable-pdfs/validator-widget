@@ -112,7 +112,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
           <div style={{ wordBreak: 'break-all' }}>{txid}</div>
           <div className="bc-box-label" style={{ marginTop: '0.5rem' }}>
             Block timestamp{' '}
-            <HelpIcon text="The moment that the block containing this issuance was mined in the Bitcoin" />
+            <HelpIcon text="The moment that the block containing this issuance was mined in the blockchain" />
           </div>
           <div style={{ wordBreak: 'break-all' }}>{timestamp}</div>
         </div>
