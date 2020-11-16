@@ -2,18 +2,18 @@ Widget to validate [Verifiable PDFs](https://verifiable-pdfs.org/) in the browse
 
 ## Usage
 
-To embed the widget on a web page you need to include the custom `blockco-validator` html tag somewhere in the page, and also include the built JS script below the custom tag. Block.co will always host the latest version of the JS script at [https://static.block.co/blockco-validator2.js](https://static.block.co/blockco-validator2.js) but anyone can built the latest code from this repository, host the JS script somewhere and include that instead.
+To embed the widget on a web page you need to include the custom `vpdf-validator` html tag somewhere in the page, and also include the built JS script below the custom tag. Block.co will always host the latest version of the JS script at [https://static.block.co/vpdf-validator.js](https://static.block.co/vpdf-validator.js) but anyone can built the latest code from this repository, host the JS script somewhere and include that instead.
 
 ### Example
 
 ```html
-<blockco-validator organization="Example LTD" contact-name="John Smith" contact-email="foo@example.org"></blockco-validator>
-<script src="https://static.block.co/blockco-validator2.js"></script>
+<vpdf-validator organization="Example LTD" contact-name="John Smith" contact-email="foo@example.org"></vpdf-validator>
+<script src="https://static.block.co/vpdf-validator.js"></script>
 ```
 
 ### Custom tag options
 
-Options for the widget can be added as html attributes in the custom `<blockco-validator>` tag. All values must be correctly escaped following html attributes rules.
+Options for the widget can be added as html attributes in the custom `<vpdf-validator>` tag. All values must be correctly escaped following html attributes rules.
 
 | Attribute                      | Explanation                                                                                                                                                                                                                                                                                                                                                                                            |
 |--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
