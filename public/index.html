@@ -28,17 +28,17 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <header style="background-color: rgb(8, 8, 17); padding: 5px 0 10px 0; text-align: center; ">
-    <h1 style="color: #e1e1e1;" class="display-4">Certificate validation</h1>
+    <h1 style="color: #e1e1e1;" class="display-4">vPDF validation</h1>
   </header>
   <div style="width: 900px; margin: 20px auto;">
     <p>Block.co, a pioneer in Blockchain Credentialing applications, offers an open source platform to issue and verify
-      digital certificates in a completely decentralized way; i.e. with no dependencies to the issuing institution or
+      digital documents in a completely decentralized way; i.e. with no dependencies to the issuing institution or
       anyone else other than Bitcoin's blockchain. This site is a front-end of the open source verification software
-      that anyone can use to validate digital certificates. Certificates are issued as PDF files with special that
+      that anyone can use to validate digital documents. vPDF documents are issued as PDF files with special that
       anchor them into the blockchain.</p>
     <blockco-validator contact-name="Vasilis Tsiolkas" contact-email="tsiolkas.v@block.co" organization="Block.co"
-testnet="false" blockchain-services="{ &quot;requiredSuccesses&quot;: 2, &quot;services&quot;: [{ &quot;name&quot;: &quot;BlockCypher&quot; }, { &quot;name&quot;: &quot;BTCD API&quot;, &quot;url&quot;: &quot;https://validator.block.co/api&quot; }] }"></blockco-validator>
-    <p style="margin-top: 25px;">Please note that the actual PDF of the certificate itself is not published to the
+testnet="false" blockchain-services="{ &quot;requiredSuccesses&quot;: 2, &quot;services&quot;: [{ &quot;name&quot;: &quot;BlockCypher&quot; }, { &quot;name&quot;: &quot;BTCD API&quot;, &quot;url&quot;: &quot;https://validator.block.co/api&quot; }] }" doc-type="document"></blockco-validator>
+    <p style="margin-top: 25px;">Please note that the actual PDF document itself is not published to the
       blockchain, but rather a fingerprint of the PDF, which is enough to validate that the exact document was indeed
       published by the issuer and timestamped by Bitcoin’s blockchain.</p>
   </div>

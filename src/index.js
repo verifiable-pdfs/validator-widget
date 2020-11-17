@@ -15,6 +15,7 @@ if (rootEls.length) {
     const contactName = rootEl.getAttribute("contact-name");
     const contactEmail = rootEl.getAttribute("contact-email");
     const org = rootEl.getAttribute("organization");
+    const docType = rootEl.getAttribute("doc-type") || 'certificate';
     const testnet = rootEl.getAttribute("testnet") === 'true';
     const blockchainServicesAttr = rootEl.getAttribute('blockchain-services');
 
@@ -28,6 +29,7 @@ if (rootEls.length) {
     ReactDOM.render(
         <App
             testnet={testnet}
+            docType={docType}
             contactName={contactName}
             contactEmail={contactEmail}
             organization={org}

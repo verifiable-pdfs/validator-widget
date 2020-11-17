@@ -93,7 +93,7 @@ class App extends React.Component {
                                 {
                                     isDragActive ?
                                         <div>Drop the file here ...</div> :
-                                        <div>Drag 'n' drop the PDF certificate here, or click to select it from your device</div>
+                                        <div>Drag 'n' drop the PDF {this.props.docType} here, or click to select it from your device</div>
                                 }
                             </div>
                         </section>
@@ -108,6 +108,7 @@ class App extends React.Component {
                             contactName={this.props.contactName}
                             contactEmail={this.props.contactEmail}
                             organization={this.props.organization}
+                            docType={this.props.docType}
                             testnet={this.props.testnet}
                             blockchainServices={this.props.blockchainServices}
                             closeFunction={this.closeModal}

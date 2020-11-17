@@ -9,7 +9,9 @@ import {
 
 import HelpIcon from './HelpIcon'
 
-const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verifications }) => {
+const capitalize = word => word.charAt(0).toUpperCase() + word.slice(1)
+
+const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verifications, docType }) => {
   const [expandedDetails, setExpandedDetails] = useState(false)
 
   return (
@@ -17,7 +19,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
       <div className="bc-key-val-container">
         <div className="bc-box-label">
           Issuer{' '}
-          <HelpIcon text="This is the name that the issuer of this certificate on the blockchain has selected to be displayed." />
+          <HelpIcon text={`This is the name that the issuer of this ${docType} on the blockchain has selected to be displayed.`} />
         </div>
         <div className="bc-box-value">{issuer}</div>
       </div>
@@ -25,7 +27,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
         <div className="bc-key-val-container">
           <div className="bc-box-label">
             Sub-issuer{' '}
-            <HelpIcon text="This is the name of the actual issuer of the certificate on behalf of whom  <br/>the issuer above issued on the blockchain.<br/>The issuer above vouches that the identity of the sub-issuer is valid." />
+            <HelpIcon text={`This is the name of the actual issuer of the ${docType} on behalf of whom  <br/>the issuer above issued on the blockchain.<br/>The issuer above vouches that the identity of the sub-issuer is valid.`} />
           </div>
           <div className="bc-box-value">{ownerResult.owner.name}</div>
           {!ownerResult.ownerValid && (
@@ -64,7 +66,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
                       icon={faTimesCircle}
                       className="bc-text-danger"
                     />{' '}
-                    <HelpIcon text="Block.co has not verified the identity of this issuer, treat this certificate with caution" />
+                    <HelpIcon text={`Block.co has not verified the identity of this issuer, treat this ${docType} with caution`} />
                   </div>
                 )
             } else if (k === 'domain') {
@@ -78,7 +80,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
                         className="bc-text-success"
                       />{' '}
                       <HelpIcon
-                        text={`The certificate issuer proved ownership of the domain displayed.<br/> Please verify that this domain actually represents ${issuer}`}
+                        text={`The ${docType} issuer proved ownership of the domain displayed.<br/> Please verify that this domain actually represents ${issuer}`}
                       />
                     </span>
                   ) : (
@@ -87,7 +89,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
                           icon={faTimesCircle}
                           className="bc-text-danger"
                         />{' '}
-                        <HelpIcon text="The certificate issuer provided the domain displayed here but could not prove ownership." />
+                        <HelpIcon text={`The ${docType} issuer provided the domain displayed here but could not prove ownership.`} />
                       </span>
                     )}
                 </div>
@@ -152,12 +154,12 @@ const MetadataTable = ({ metadata }) => (
   </table>
 )
 
-const ErrorMsg = ({ customText }) => (
+const ErrorMsg = ({ customText, docType }) => (
   <div className="p-3">
     <p>
       <FontAwesomeIcon icon={faInfoCircle} className="text-primary" /> Please
       make sure this is the original PDF that was issued on the blockchain and
-      not an edited file or a scanned copy of the certificate. Even opening the
+      not an edited file or a scanned copy of the {docType}. Even opening the
       PDF in Adobe Acrobat Reader and saving it will render it invalid because
       Acrobat Reader modifies the file internally when saving it.
     </p>
@@ -165,7 +167,7 @@ const ErrorMsg = ({ customText }) => (
       <>
         <br />
         <p>
-          For manual validation of {customText.organization} certificates please
+          For manual validation of {customText.organization} {docType}s please
           contact {customText.contactName} (
           <a href={`mailto:${customText.contactEmail}`}>
             {customText.contactEmail}
@@ -177,7 +179,7 @@ const ErrorMsg = ({ customText }) => (
   </div>
 )
 
-const Result = ({ result, error, customText }) => {
+const Result = ({ docType, result, error, customText }) => {
   return (
     <div>
       {error && (
@@ -185,7 +187,7 @@ const Result = ({ result, error, customText }) => {
           <div className="bc-alert bc-alert-danger bc-text-center">
             <FontAwesomeIcon icon={faTimesCircle} /> {error.detail}
           </div>
-          <ErrorMsg customText={customText} />
+          <ErrorMsg customText={customText} docType={docType} />
         </>
       )}
       {result && (
@@ -198,7 +200,7 @@ const Result = ({ result, error, customText }) => {
                   'bc-alert-warning': result.id_proofs === 0
                 })}
               >
-                <FontAwesomeIcon icon={faCheckCircle} /> Certificate{' '}
+                <FontAwesomeIcon icon={faCheckCircle} /> {capitalize(docType)}{' '}
                 <strong>{result.filename}</strong> is valid!
                 {result.id_proofs === 0 && (
                   <p>
@@ -218,6 +220,7 @@ const Result = ({ result, error, customText }) => {
                 txid={result.txid}
                 timestamp={result.timestamp}
                 verifications={result.result.verification}
+                docType={docType}
               />
               {Array.isArray(result.metadata) && result.metadata.length > 0 && (
                 <MetadataTable metadata={result.metadata} />
@@ -226,7 +229,7 @@ const Result = ({ result, error, customText }) => {
           ) : (
               <>
                 <div className="bc-alert bc-alert-danger bc-text-center">
-                  <FontAwesomeIcon icon={faTimesCircle} /> Certificate{' '}
+                  <FontAwesomeIcon icon={faTimesCircle} /> {capitalize(docType)}{' '}
                   <strong>{result.filename}</strong> is not valid.
                   {/* {result.result.reason && <p>{result.result.reason}</p>} */}
                   {result.result.expiry_date && (
@@ -235,16 +238,16 @@ const Result = ({ result, error, customText }) => {
                     </p>
                   )}
                   {result.result.revoked === 'certificate' && (
-                    <p>The certificate has been revoked.</p>
+                    <p>The {docType} has been revoked.</p>
                   )}
                   {result.result.revoked === 'address' && (
                     <p>The issuer has invalidated this issuing address.</p>
                   )}
                   {result.result.revoked === 'batch' && (
-                    <p>The issuance containing this certificate has been revoked.</p>
+                    <p>The issuance containing this {docType} has been revoked.</p>
                   )}
                 </div>
-                <ErrorMsg customText={customText} />
+                <ErrorMsg customText={customText} docType={docType} />
               </>
             )}
         </>)}

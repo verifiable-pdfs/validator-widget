@@ -19,6 +19,7 @@ export default function CoreValidator({
   contactEmail,
   contactName,
   organization,
+  docType,
   testnet = false
 }) {
   const [loading, setLoading] = useState(true)
@@ -37,7 +38,7 @@ export default function CoreValidator({
         pdfArrayBuffer
       ).promise.catch(err => {
         console.error(err)
-        throw new Error('Could not parse the PDF file.')
+        throw new Error('Could not parse the PDF document.')
       })
 
       // Parse the PDF metadata from the PDFJS document
@@ -73,7 +74,7 @@ export default function CoreValidator({
         <div className="bc-column bc-col-left bc-text-center">
           {topDisplay}
           {loading ? (
-            <Loader text="Validating certificate, please wait..." />
+            <Loader text={`Validating ${docType}, please wait...`} />
           ) : (preError ?
             <div className="bc-alert bc-alert-danger bc-text-center">
               <FontAwesomeIcon icon={faTimesCircle} /> {preError.detail}
@@ -81,6 +82,7 @@ export default function CoreValidator({
             <>
               {testnet && <div>TESTNET</div>}
               <Result
+                docType={docType}
                 result={result}
                 error={error}
                 customText={{ contactEmail, contactName, organization }}
