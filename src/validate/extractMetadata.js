@@ -1,3 +1,12 @@
+const isBitcoinTestnetAddress = (address) => {
+  return (
+    address.startsWith('m') ||
+    address.startsWith('n') ||
+    address.startsWith('2') ||
+    address.startsWith('tb')
+  )
+}
+
 const getNetwork = (proof, address) => {
   // currently only a single anchor is allowed at a time
   const chainType = proof.anchors[0].type
@@ -6,10 +15,10 @@ const getNetwork = (proof, address) => {
 
   if (chainType === 'BTCOpReturn') {
     chain = 'bitcoin'
-    // Documents issued before version 2.1 always had `BTCOpReturn` as chainType
+    // Documents issued before core-lib version 2.1 always had `BTCOpReturn` as chainType
     // For backwards compatibility, we need to also check the issuer address
     // in case it was on testnet
-    if (address.startsWith('m') || address.startsWith('n') || address.startsWith('tb')) {
+    if (isBitcoinTestnetAddress(address)) {
       testnet = true
     } else {
       testnet = false

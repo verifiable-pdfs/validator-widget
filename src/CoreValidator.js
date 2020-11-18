@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import Loader from './components/Loader'
 import Result from './components/Result'
+import HelpIcon from './components/HelpIcon'
+
 import PDFViewer from './pdf/PDFViewer'
 import validate from './validate/validate'
 
@@ -79,7 +81,9 @@ export default function CoreValidator({
               <FontAwesomeIcon icon={faTimesCircle} /> {preError.detail}
             </div> :
             <>
-              {/* {result.testnet && <div>TESTNET</div>} */}
+              {result && result.testnet && (
+                  <div style={{ color: '#CCC', fontWeight: 'bolder', fontSize: '32px', margin: '0 0 10px 0' }}>TESTNET <HelpIcon text={`This ${docType} was issued for testing purposes`} /></div>
+              )}
               <Result
                 docType={docType}
                 result={result}
