@@ -21,7 +21,6 @@ class App extends React.Component {
         modalOpen: false,
         pdf: null
     };
-    lastDropEvent;
 
     validateJS = (file) => {
         // Validates a vPDF on the browser-side
@@ -37,13 +36,6 @@ class App extends React.Component {
     }
 
     processPDF = (acceptedFiles) => {
-        // Rendering inside the web component makes the drop event fire twice
-        // (because of https://www.npmjs.com/package/react-shadow-dom-retarget-events)
-        // binding it on top of Dropzone's listener
-        // This is a quick hack to avoid this
-        if (this.lastDropEvent && (Date.now() - this.lastDropEvent < 500)) return;
-        this.lastDropEvent = Date.now();
-
         if (!acceptedFiles.length) {
             const preError = 'Not a valid PDF file';
             console.error(preError);
@@ -109,7 +101,6 @@ class App extends React.Component {
                             contactEmail={this.props.contactEmail}
                             organization={this.props.organization}
                             docType={this.props.docType}
-                            testnet={this.props.testnet}
                             blockchainServices={this.props.blockchainServices}
                             closeFunction={this.closeModal}
                         />
@@ -121,8 +112,24 @@ class App extends React.Component {
 }
 
 App.defaultProps = {
-    testnet: false,
-    blockchainServices: { requiredSuccesses: 1, services: [{ name: 'BTCD API', url: 'https://validator.block.co/api' }] }
+    blockchainServices: {
+        'bitcoin': {
+            requiredSuccesses: 1,
+            services: [{ name: 'btcd', url: 'https://validator.block.co/blockchain-api' }]
+        },
+        'bitcoin-testnet': {
+            requiredSuccesses: 1,
+            services: [{ name: 'btcd', url: 'https://testnet-validator.block.co/blockchain-api' }]
+        },
+        'litecoin': {
+            requiredSuccesses: 1,
+            services: [{ name: 'ltcd', url: 'https://validator.block.co/blockchain-api' }]
+        },
+        'litecoin-testnet': {
+            requiredSuccesses: 1,
+            services: [{ name: 'ltcd', url: 'https://testnet-validator.block.co/blockchain-api' }]
+        }
+    }
 };
 
 export default hot(module)(App);

@@ -105,11 +105,9 @@ const queryBlockcypher = async (address, txid, testnet) => {
   return splitTransactions(transactions, txid, true)
 }
 
-const queryBTCDApi = async (BTCDUrl, address, txid, testnet) => {
-  if ((address.startsWith('m') || address.startsWith('n') || address.startsWith('2') || address.startsWith('tb')) && !testnet) {
-    throw new Error('The address of the issuer of this certificate is incompatible with BTC Mainnet. Maybe it was issued on a different network?')
-  }
-  const url = `${BTCDUrl}/address/${address}`
+const queryBLTCDApi = async (BLTCDUrl, address, txid, chain) => {
+  // This works for both our btcd and ltcd APIs
+  const url = `${BLTCDUrl}/${chain}/address/${address}`
   const res = await request.get(url).catch(error => {
     let err =
       error.response && error.response.data ? error.response.data.error : ''
@@ -117,26 +115,22 @@ const queryBTCDApi = async (BTCDUrl, address, txid, testnet) => {
       err ||
       'Something happened when trying to contact BTCD API. Please try again later.'
 
-    if (err.includes('Invalid address or key')) {
-      err = testnet
-        ? 'The address of the issuer of this certificate is incompatible with BTC Testnet. Maybe it was issued on a different network?'
-        : 'The address of the issuer of this certificate is incompatible with BTC Mainnet. Maybe it was issued on a different network?'
-    }
-
     throw new Error(err)
   })
 
   return splitTransactions(res.data, txid)
 }
 
-const queryBlockchainServices = async (blockchainServices, address, txid, testnet) => {
+const queryBlockchainServices = async (blockchainServices, address, txid, chain, testnet) => {
   const blockchainServicesQueries = [];
+  let servicesName = chain + (testnet ? '-testnet' : '');
+  const chainBlockchainServices = blockchainServices[servicesName]
 
-  blockchainServices.services.forEach(service => {
-    if (service.name === 'BlockCypher') {
+  chainBlockchainServices.services.forEach(service => {
+    if (service.name === 'blockcypher') {
       blockchainServicesQueries.push(queryBlockcypher(address, txid, testnet))
-    } else if (service.name === 'BTCD API') {
-      blockchainServicesQueries.push(queryBTCDApi(service.url, address, txid, testnet))
+    } else if (service.name === 'btcd' || service.name === 'ltcd') {
+      blockchainServicesQueries.push(queryBLTCDApi(service.url, address, txid, chain))
     }
   })
 

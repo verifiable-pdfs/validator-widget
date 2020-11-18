@@ -10,8 +10,7 @@ import extractMetadata from './extractMetadata'
 export default async function validate(
   pdfArrayBuffer,
   pdfJSMetadata,
-  blockchainServices,
-  testnet
+  blockchainServices
 ) {
   // Get our relevant metadata
   const metadata = await extractMetadata(pdfJSMetadata).catch(e => {
@@ -24,6 +23,8 @@ export default async function validate(
       metadata.issuer &&
       metadata.address &&
       metadata.txid &&
+      metadata.chain &&
+      metadata.testnet &&
       metadata.chainpoint_proof_object
     )
   ) {
@@ -33,10 +34,10 @@ export default async function validate(
   // Get the raw PDF string from the reader event and
   // extract the hash after emptying the chainpointProof
   let pdfString = ArrayBufferToString(pdfArrayBuffer)
-  return await _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServices, testnet)
+  return await _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServices)
 }
 
-async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServices, testnet) {
+async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServices) {
   // Extract the hash (without emptying owner_proof)
   let PDFHash = await extractHash(pdfString, pdfJSMetadata)
   let validationResult = {}
@@ -47,7 +48,8 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
     blockchainServices,
     metadata.address,
     metadata.txid,
-    testnet
+    metadata.chain,
+    metadata.testnet
   )
   // Keep the timestamp to display if the certificate is valid after all
   const timestamp = transactions.before[0].timestamp
@@ -70,7 +72,7 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
       status: revocationResult.valid ? 'valid' : 'invalid',
       reason: revocationResult.reason
     }
-    result.verification = await validateIdentity(metadata, testnet)
+    result.verification = await validateIdentity(metadata)
     let id_proofs = null
     if (metadata.version !== '0') {
       id_proofs = Object.values(result.verification).filter(v => v.success)
@@ -95,7 +97,7 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
     if (metadata.version === '2' && metadata.owner && metadata.ownerProof) {
       // Reextract the hash, now also removing owner_proof
       PDFHash = await extractHash(pdfString, pdfJSMetadata, true)
-      const ownerValid = validateOwner(testnet, metadata, PDFHash)
+      const ownerValid = validateOwner(metadata, PDFHash)
       ownerResult = {
         ownerValid,
         owner: metadata.owner
@@ -107,6 +109,8 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
       issuer: metadata.issuer,
       metadata: metadata.visible_metadata,
       txid: metadata.txid,
+      chain: metadata.chain,
+      testnet: metadata.testnet,
       timestamp,
       id_proofs,
       result

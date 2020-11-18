@@ -20,7 +20,6 @@ export default function CoreValidator({
   contactName,
   organization,
   docType,
-  testnet = false
 }) {
   const [loading, setLoading] = useState(true)
   const [preError, setPreError] = useState(null)
@@ -49,7 +48,7 @@ export default function CoreValidator({
 
       setPdf(pdfJSDocument)
 
-      validate(pdfArrayBuffer, pdfJSMetadata, blockchainServices, testnet)
+      validate(pdfArrayBuffer, pdfJSMetadata, blockchainServices)
         .then(res => {
           setLoading(false)
           setResult(res)
@@ -66,7 +65,7 @@ export default function CoreValidator({
       setLoading(false)
       setPreError(err.message)
     })
-  }, [blockchainServices, pdfArrayBuffer, testnet])
+  }, [blockchainServices, pdfArrayBuffer])
 
   return (
     <div className="core-validator" style={{ height: '100%', overflowY: 'none' }}>
@@ -80,7 +79,7 @@ export default function CoreValidator({
               <FontAwesomeIcon icon={faTimesCircle} /> {preError.detail}
             </div> :
             <>
-              {testnet && <div>TESTNET</div>}
+              {/* {result.testnet && <div>TESTNET</div>} */}
               <Result
                 docType={docType}
                 result={result}

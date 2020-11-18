@@ -1,3 +1,36 @@
+const getNetwork = (proof, address) => {
+  // currently only a single anchor is allowed at a time
+  const chainType = proof.anchors[0].type
+
+  let chain, testnet
+
+  if (chainType === 'BTCOpReturn') {
+    chain = 'bitcoin'
+    // Documents issued before version 2.1 always had `BTCOpReturn` as chainType
+    // For backwards compatibility, we need to also check the issuer address
+    // in case it was on testnet
+    if (address.startsWith('m') || address.startsWith('n') || address.startsWith('tb')) {
+      testnet = true
+    } else {
+      testnet = false
+    }
+  } else if (chainType === 'BTCTestnetOpReturn') {
+    chain = 'bitcoin'
+    testnet = true
+  } else if (chainType === 'LTCOpReturn') {
+    chain = 'litecoin'
+    testnet = false
+  } else if (chainType === 'LTCTestnetOpReturn') {
+    chain = 'litecoin'
+    testnet = true
+  } else {
+    throw new Error('Could not determine blockchain network from chainpoint proof')
+  }
+
+  return { chain, testnet }
+}
+
+
 const extractMetadata = async pdfInfo => {
   // Extracts the relevant metadata of the vPDF from
   // the PDFJS parsed metadata
@@ -86,6 +119,7 @@ const extractMetadata = async pdfInfo => {
 
   const chainpoint_proof_object = JSON.parse(chainpoint_proof)
   const txid = chainpoint_proof_object['anchors'][0]['sourceId']
+  const { chain, testnet } = getNetwork(chainpoint_proof_object, address)
 
   return {
     version,
@@ -95,6 +129,8 @@ const extractMetadata = async pdfInfo => {
     visible_metadata,
     txid,
     chainpoint_proof_object,
+    chain,
+    testnet,
     owner,
     ownerProof
   }

@@ -36,7 +36,7 @@ const verifyDomainIdentityMethod = async (url, address) => {
   })
 }
 
-const validateIdentity = async (metadata, isTestnet) => {
+const validateIdentity = async (metadata) => {
   // Check each of the verificationMethods for identity proof
   let { address, verificationMethods } = metadata
   const verificationResults = {}
@@ -50,7 +50,7 @@ const validateIdentity = async (metadata, isTestnet) => {
 
     for (let verificationMethod of verificationMethods) {
       if (verificationMethod.block_co) {
-        promiseArray.push(verifyBlockcoIdentityMethod(address, isTestnet))
+        promiseArray.push(verifyBlockcoIdentityMethod(address, metadata.testnet))
       } else if (verificationMethod.domain && verificationMethod.domain.url) {
         promiseArray.push(
           verifyDomainIdentityMethod(verificationMethod.domain.url, address)
