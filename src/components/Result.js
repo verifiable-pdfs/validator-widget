@@ -11,7 +11,7 @@ import HelpIcon from './HelpIcon'
 
 const capitalize = word => word.charAt(0).toUpperCase() + word.slice(1)
 
-const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verifications, docType, chain }) => {
+const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verifications, docType, chain, testnet }) => {
   const [expandedDetails, setExpandedDetails] = useState(false)
 
   return (
@@ -106,8 +106,8 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
             Blockchain{' '}
             <HelpIcon text="Displays the blockchain on which the issuance is anchored" />
           </div>
-          <div style={{ wordBreak: 'break-all' }}>{chain}</div>
-          <div className="bc-box-label">
+          <div style={{ wordBreak: 'break-all' }}>{capitalize(chain) + (testnet ? ' testnet' : '')}</div>
+          <div className="bc-box-label" style={{ marginTop: '0.5rem' }}>
             Issuer ID{' '}
             <HelpIcon text="Unique identifier of the issuer on the blockchain" />
           </div>
@@ -227,6 +227,7 @@ const Result = ({ docType, result, error, customText }) => {
                 verifications={result.result.verification}
                 docType={docType}
                 chain={result.chain}
+                testnet={result.testnet}
               />
               {Array.isArray(result.metadata) && result.metadata.length > 0 && (
                 <MetadataTable metadata={result.metadata} />

@@ -17,11 +17,11 @@ export default function CoreValidator({
   closeFunction,
   topDisplay,
   bottomDisplay,
-  blockchainServices = { requiredSuccesses: 1, services: [{ name: 'BlockCypher' }] },
+  blockchainServices,
   contactEmail,
   contactName,
   organization,
-  docType,
+  docType = 'certificate',
 }) {
   const [loading, setLoading] = useState(true)
   const [preError, setPreError] = useState(null)
@@ -82,7 +82,7 @@ export default function CoreValidator({
             </div> :
             <>
               {result && result.testnet && (
-                  <div style={{ color: '#CCC', fontWeight: 'bolder', fontSize: '32px', margin: '0 0 10px 0' }}>TESTNET <HelpIcon text={`This ${docType} was issued for testing purposes`} /></div>
+                  <div style={{ color: '#999', fontWeight: 'bolder', fontSize: '32px', margin: '0 0 10px 0' }}>TESTNET <HelpIcon text={`This ${docType} was issued for testing purposes`} /></div>
               )}
               <Result
                 docType={docType}

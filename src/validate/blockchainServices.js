@@ -113,7 +113,7 @@ const queryBLTCDApi = async (BLTCDUrl, address, txid, chain) => {
       error.response && error.response.data ? error.response.data.error : ''
     err =
       err ||
-      'Something happened when trying to contact BTCD API. Please try again later.'
+      'Something happened when trying to contact blockchain API. Please try again later.'
 
     throw new Error(err)
   })
@@ -136,19 +136,19 @@ const queryBlockchainServices = async (blockchainServices, address, txid, chain,
 
   const results = await allSettled(blockchainServicesQueries)
   const actualSuccesses = results.filter(r => r.status === 'fulfilled').length
-  if (actualSuccesses < blockchainServices.requiredSuccesses) {
+  if (actualSuccesses < chainBlockchainServices.requiredSuccesses) {
     const reasons = results.map(r => r.reason).filter(r => r)
     throw new Error(reasons[0])
   }
 
   const succesfulResults = results.map(r => r.value).filter(r => r)
 
-  if (succesfulResults.length > 1 && blockchainServices.requiredSuccesses > 1) {
+  if (succesfulResults.length > 1 && chainBlockchainServices.requiredSuccesses > 1) {
     const orig = JSON.stringify(succesfulResults[0]);
-    for (let i = 1; i < succesfulResults.length; i++) {
+    for (let i = 1; i < blockchainServices.requiredSuccesses; i++) {
       const targ = JSON.stringify(succesfulResults[i]);
       if (orig !== targ) {
-        throw new Error('Different results from the services')
+        throw new Error('Different results from the blockchain services')
       }
     }
   }

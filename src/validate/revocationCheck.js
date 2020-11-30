@@ -4,12 +4,22 @@ import createHash from 'create-hash/browser'
 import { bytesToHex, hexToBytes } from './hexUtils'
 import { Buffer } from 'buffer'
 
-const getCpTxid = cpProof => {
+
+const CHAINTYPE_ANCHORS = {
+  'bitcoin': ['BTCOpReturn'],
+  // BTC testnet issuances before core-lib v2.1 used BTCOpReturn,
+  // so for testnet we check both values
+  'bitcoin-testnet': ['BTCOpReturn', 'BTCTestnetOpReturn'],
+  'litecoin': ['LTCOpReturn'],
+  'litecoin-testnet': ['LTCTestnetOpReturn'],
+}
+
+const getCpTxid = (cpProof, chain, testnet) => {
+  let chainType = chain + (testnet ? '-testnet' : '')
   let anchors = cpProof['anchors']
   let cpTxid = ''
   for (let a of anchors) {
-    // TODO add anchor['type'] btc
-    if (a['type'] === 'BTCOpReturn') {
+    if (CHAINTYPE_ANCHORS[chainType].includes(a['type'])) {
       cpTxid = a['sourceId']
       break
     }
@@ -21,7 +31,7 @@ const getCpTxid = cpProof => {
 const revocationCheck = (valid, reason, transactions, metadata, PDFHash) => {
   let issuerAddress = metadata.address
   let cpProof = metadata.chainpoint_proof_object
-  let cpTxid = getCpTxid(cpProof)
+  let cpTxid = getCpTxid(cpProof, metadata.chain, metadata.testnet)
 
   if (!valid && !reason.startsWith('certificate expired')) {
     return { valid, reason }

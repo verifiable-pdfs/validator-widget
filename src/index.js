@@ -15,7 +15,7 @@ if (rootEls.length) {
     const contactName = rootEl.getAttribute("contact-name");
     const contactEmail = rootEl.getAttribute("contact-email");
     const org = rootEl.getAttribute("organization");
-    const docType = rootEl.getAttribute("doc-type") || 'certificate';
+    const docType = rootEl.getAttribute("doc-type");
     const blockchainServicesAttr = rootEl.getAttribute('blockchain-services');
 
     let blockchainServices;

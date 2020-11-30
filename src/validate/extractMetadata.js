@@ -9,13 +9,13 @@ const isBitcoinTestnetAddress = (address) => {
 
 const getNetwork = (proof, address) => {
   // currently only a single anchor is allowed at a time
-  const chainType = proof.anchors[0].type
+  const anchorType = proof.anchors[0].type
 
   let chain, testnet
 
-  if (chainType === 'BTCOpReturn') {
+  if (anchorType === 'BTCOpReturn') {
     chain = 'bitcoin'
-    // Documents issued before core-lib version 2.1 always had `BTCOpReturn` as chainType
+    // Documents issued before core-lib version 2.1 always had `BTCOpReturn` as anchorType
     // For backwards compatibility, we need to also check the issuer address
     // in case it was on testnet
     if (isBitcoinTestnetAddress(address)) {
@@ -23,13 +23,13 @@ const getNetwork = (proof, address) => {
     } else {
       testnet = false
     }
-  } else if (chainType === 'BTCTestnetOpReturn') {
+  } else if (anchorType === 'BTCTestnetOpReturn') {
     chain = 'bitcoin'
     testnet = true
-  } else if (chainType === 'LTCOpReturn') {
+  } else if (anchorType === 'LTCOpReturn') {
     chain = 'litecoin'
     testnet = false
-  } else if (chainType === 'LTCTestnetOpReturn') {
+  } else if (anchorType === 'LTCTestnetOpReturn') {
     chain = 'litecoin'
     testnet = true
   } else {
