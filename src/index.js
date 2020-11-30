@@ -27,7 +27,7 @@ if (rootEls.length) {
 
     ReactDOM.render(
         <App
-            docType={docType}
+            docType={docType || 'certificate'}
             contactName={contactName}
             contactEmail={contactEmail}
             organization={org}
