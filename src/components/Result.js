@@ -6,7 +6,7 @@ import {
   faTimesCircle,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons'
-
+import Datetime from './Datetime'
 import HelpIcon from './HelpIcon'
 
 const capitalize = word => word.charAt(0).toUpperCase() + word.slice(1)
@@ -121,7 +121,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
             Block timestamp{' '}
             <HelpIcon text="The moment that the block containing this issuance was mined in the blockchain" />
           </div>
-          <div style={{ wordBreak: 'break-all' }}>{timestamp}</div>
+          <div style={{ wordBreak: 'break-all' }}><Datetime utc={timestamp} singleRow={true} /></div>
         </div>
       ) : (
           <div className="bc-text-center" style={{ marginTop: '0.5rem' }}>
