@@ -82,7 +82,7 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
       const r = result.reason
       if (r.includes('valid until: ') || r.includes('expired at:')) {
         const timestamp = parseInt(result['reason'].split(':')[1].trim())
-        result.expiry_date = new Date(timestamp * 1000).toUTCString()
+        result.expiry_date = new Date(timestamp * 1000).toLocaleString()
       } else if (r === 'address was revoked') {
         result.revoked = 'address'
       } else if (r === 'batch was revoked') {
