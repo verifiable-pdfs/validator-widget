@@ -84,7 +84,7 @@ class App extends React.Component {
                                 <input {...getInputProps()} />
                                 {
                                     isDragActive ?
-                                        <div>Drop the file here ...</div> :
+                                        <div>Drop the file here...</div> :
                                         <div>Drag 'n' drop the PDF {this.props.docType} here, or click to select it from your device</div>
                                 }
                             </div>
