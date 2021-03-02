@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import PDFJS from 'pdfjs-dist'
+import * as PDFJS from 'pdfjs-dist'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import Loader from './components/Loader'
