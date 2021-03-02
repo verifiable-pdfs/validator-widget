@@ -189,7 +189,7 @@ const Result = ({ docType, result, error, customText }) => {
     <div>
       {error && (
         <>
-          <div className="bc-alert bc-alert-danger bc-text-center">
+          <div id="result_message" className="bc-alert bc-alert-danger bc-text-center">
             <FontAwesomeIcon icon={faTimesCircle} /> {error.detail}
           </div>
           <ErrorMsg customText={customText} docType={docType} />
@@ -200,6 +200,7 @@ const Result = ({ docType, result, error, customText }) => {
           {result.result.status === 'valid' ? (
             <>
               <div
+		id="result_message"
                 className={classNames('bc-alert bc-text-center', {
                   'bc-alert-success': result.id_proofs !== 0,
                   'bc-alert-warning': result.id_proofs === 0
@@ -235,7 +236,7 @@ const Result = ({ docType, result, error, customText }) => {
             </>
           ) : (
               <>
-                <div className="bc-alert bc-alert-danger bc-text-center">
+                <div id="result_message" className="bc-alert bc-alert-danger bc-text-center">
                   <FontAwesomeIcon icon={faTimesCircle} /> {capitalize(docType)}{' '}
                   <strong>{result.filename}</strong> is not valid.
                   {/* {result.result.reason && <p>{result.result.reason}</p>} */}
