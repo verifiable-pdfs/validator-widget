@@ -81,7 +81,7 @@ class App extends React.Component {
                     {({ getRootProps, getInputProps, isDragActive }) => (
                         <section>
                             <div {...getRootProps()} className={classNames('dropzone', { 'hover': isDragActive })}>
-                                <input {...getInputProps()} />
+                                <input id='pdf_dropzone' {...getInputProps()} />
                                 {
                                     isDragActive ?
                                         <div>Drop the file here...</div> :
