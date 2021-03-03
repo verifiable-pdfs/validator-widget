@@ -21,7 +21,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
           Issuer{' '}
           <HelpIcon text={`This is the name that the issuer of this ${docType} on the blockchain has selected to be displayed.`} />
         </div>
-        <div className="bc-box-value">{issuer}</div>
+        <div id='issuer_id' className="bc-box-value">{issuer}</div>
       </div>
       {ownerResult && (
         <div className="bc-key-val-container">
@@ -189,7 +189,7 @@ const Result = ({ docType, result, error, customText }) => {
     <div>
       {error && (
         <>
-          <div id="result_message" className="bc-alert bc-alert-danger bc-text-center">
+          <div id="result_invalid" className="bc-alert bc-alert-danger bc-text-center">
             <FontAwesomeIcon icon={faTimesCircle} /> {error.detail}
           </div>
           <ErrorMsg customText={customText} docType={docType} />
@@ -200,7 +200,7 @@ const Result = ({ docType, result, error, customText }) => {
           {result.result.status === 'valid' ? (
             <>
               <div
-		id="result_message"
+		id="result_valid"
                 className={classNames('bc-alert bc-text-center', {
                   'bc-alert-success': result.id_proofs !== 0,
                   'bc-alert-warning': result.id_proofs === 0
@@ -236,7 +236,7 @@ const Result = ({ docType, result, error, customText }) => {
             </>
           ) : (
               <>
-                <div id="result_message" className="bc-alert bc-alert-danger bc-text-center">
+                <div id="result_revoked_expired" className="bc-alert bc-alert-danger bc-text-center">
                   <FontAwesomeIcon icon={faTimesCircle} /> {capitalize(docType)}{' '}
                   <strong>{result.filename}</strong> is not valid.
                   {/* {result.result.reason && <p>{result.result.reason}</p>} */}
