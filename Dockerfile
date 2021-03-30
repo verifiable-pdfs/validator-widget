@@ -14,7 +14,7 @@ WORKDIR /react-ui
 COPY . .
 
 # Build the project and copy the files
-npm run build
+RUN npm run build
 
 FROM nginx:alpine
 
@@ -26,4 +26,3 @@ RUN rm -rf /usr/share/nginx/html/*
 
 # Copy from the stahg 1
 COPY --from=builder /react-ui/build /usr/share/nginx/html
-COPY --from=builder /react-ui/entrypoint.sh /entrypoint.sh
