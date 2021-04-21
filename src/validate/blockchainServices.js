@@ -21,20 +21,22 @@ const splitTransactions = (transactions, txid, isBlockcypher=false) => {
   let before = []
   let after = []
   let foundIssuance = false
-  let timestamp
 
   for (let tx of transactions) {
     if (tx.confirmations <= 0) continue
 
+    // BTCDApi just returns a timestamp, we format it like blockcypher's response for comparing purposes
+    let timestamp = isBlockcypher ? tx.confirmed : new Date(tx.blocktime * 1000).toISOString().replace('.000', '')
+
     let txhash = isBlockcypher ? tx.hash : tx.txid
     if (txhash === txid) {
       foundIssuance = true
-      // BTCDApi just returns a timestamp, we format it like blockcypher's response for comparing purposes
-      timestamp = isBlockcypher ? tx.confirmed : new Date(tx.blocktime * 1000).toISOString().replace('.000', '')
-    } else {
-      // We just want the timestamp for the actual tx that contains the issuance, set undefined for the rest
-      timestamp = undefined
+      
     }
+    //  else {
+    //   // We just want the timestamp for the actual tx that contains the issuance, set undefined for the rest
+    //   timestamp = undefined
+    // }
 
     let outputs = isBlockcypher ? tx.outputs : tx.vout
     for (let o of outputs) {

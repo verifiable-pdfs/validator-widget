@@ -54,13 +54,14 @@ const revocationCheck = (valid, reason, transactions, metadata, PDFHash) => {
 
   let reversedAfter = transactions.after.reverse()
   for (let opReturn of reversedAfter) {
+    let revocation_timestamp = opReturn.timestamp
     let opData = parseOpReturnHex(opReturn.data)
     if (opData) {
       if (opData['cmd'] === operators['op_revoke_batch']) {
         if (cpTxid === opData['data']['txid']) {
           valid = false
           reason = 'batch was revoked'
-          return { valid, reason }
+          return { valid, reason, revocation_timestamp }
         }
       } else if (opData['cmd'] === operators['op_revoke_creds']) {
         if (cpTxid === opData['data']['txid']) {
@@ -75,7 +76,7 @@ const revocationCheck = (valid, reason, transactions, metadata, PDFHash) => {
             if (ripemdPDFHash === h) {
               valid = false
               reason = 'cert hash was revoked'
-              return { valid, reason }
+              return { valid, reason, revocation_timestamp }
             }
           }
         }

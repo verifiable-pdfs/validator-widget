@@ -70,7 +70,8 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
     )
     const result = {
       status: revocationResult.valid ? 'valid' : 'invalid',
-      reason: revocationResult.reason
+      reason: revocationResult.reason,
+      revocation_timestamp: revocationResult.revocation_timestamp
     }
     result.verification = await validateIdentity(metadata)
     let id_proofs = null
@@ -122,6 +123,5 @@ async function _validateInner(metadata, pdfString, pdfJSMetadata, blockchainServ
     console.error(e)
     throw new Error('Something went wrong while trying to verify this file.')
   }
-
   return validationResult
 }
