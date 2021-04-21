@@ -11,8 +11,7 @@ import HelpIcon from './HelpIcon'
 
 const capitalize = word => word.charAt(0).toUpperCase() + word.slice(1)
 
-const createTxidLink = ({txid,chain,testnet}) => {
-
+const createTxidLink = (txid,chain,testnet) => {
         let url;
         if (chain === 'bitcoin' && !testnet) {
             url = `https://blockstream.info/tx/${txid}`;
@@ -28,8 +27,6 @@ const createTxidLink = ({txid,chain,testnet}) => {
 
 const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verifications, docType, chain, testnet }) => {
   const [expandedDetails, setExpandedDetails] = useState(false)
-
-
 
   return (
     <div style={{ marginBottom: '1.5rem' }}>
@@ -133,7 +130,7 @@ const IdentityObject = ({ address, issuer, ownerResult, txid, timestamp, verific
             Issuance transaction ID{' '}
             <HelpIcon text="Transaction ID of the issuance on the blockchain" />
           </div>
-          <div style={{ wordBreak: 'break-all' }}><a href={createTxidLink({txid,chain,testnet})} target="blank">{txid}</a></div>
+          <div style={{ wordBreak: 'break-all' }}><a href={createTxidLink(txid,chain,testnet)} target="blank">{txid}</a></div>
           <div className="bc-box-label" style={{ marginTop: '0.5rem' }}>
             Block timestamp{' '}
             <HelpIcon text="The moment that the block containing this issuance was mined in the blockchain" />
@@ -275,7 +272,6 @@ const Result = ({ docType, result, error, customText }) => {
                     <p>Revoked at: <Datetime utc={result.result.revocation_timestamp} singleRow={true}/></p>
                   )}
                 </div>
-                
                 <ErrorMsg customText={customText} docType={docType} />
               </>
             )}
