@@ -70,7 +70,6 @@
     "semver": "6.3.0",
     "ssri": "6.0.2",
     "style-loader": "1.0.0",
-    "swiper": "6.5.1",
     "terser-webpack-plugin": "1.4.1",
     "text-encoding": "^0.7.0",
     "ts-pnp": "1.1.4",
