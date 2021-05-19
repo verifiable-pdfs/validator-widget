@@ -23,7 +23,7 @@ const splitTransactions = (transactions, txid, isBlockcypher=false) => {
   let foundIssuance = false
 
   for (let tx of transactions) {
-    if (tx.confirmations <= 0) continue
+    if (!tx.confirmations || tx.confirmations <= 0) continue
 
     // BTCDApi just returns a timestamp, we format it like blockcypher's response for comparing purposes
     let timestamp = isBlockcypher ? tx.confirmed : new Date(tx.blocktime * 1000).toISOString().replace('.000', '')
