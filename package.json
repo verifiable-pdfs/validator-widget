@@ -101,8 +101,8 @@
   },
   "devDependencies": {
     "@hot-loader/react-dom": "^16.10.2",
-    "node-sass": "^4.13.0",
     "react-hot-loader": "^4.12.15",
+    "sass": "^1.32.13",
     "yarn": "^1.19.1"
   },
   "jest": {

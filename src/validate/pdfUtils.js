@@ -121,6 +121,9 @@ const extractHash = async (pdfString, pdfJSMetadata, removeOwnerProof=false) => 
   // Locate where the INFO object is inside the pdf
   let re = /trailer[\s\S]*\/Info([\s\S]*?)\/Root/
   let match = re.exec(pdfString)
+  if (!match) {
+    throw new Error('Could not locate the metadata inside the PDF.')
+  }
   let infoObject = match[1].trim()
 
   let metadataString;
