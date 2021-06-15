@@ -1,5 +1,38 @@
 import { bytesToHex } from './hexUtils'
 
+const remove_cp_value_from_metadata = str => {
+	let res = str.split("/chainpoint_proof");
+
+	let regExp = /\(([^)]+)\)/;
+	let matches = regExp.exec(res[1])
+	let nstr = str.replace(matches[1], '')
+
+	let nres = nstr.split("\n");
+	let newres = ""
+	let line = ""
+	let cp_found = false
+	for(let index = 0; index < nres.length; index++) {
+		if(nres[index].includes('/chainpoint_proof')) {
+			cp_found = true
+		}
+		if(cp_found) {
+			if(index < nres.length - 1) {
+				if(line.length + nres[index].length + nres[index + 1].length > 71) {
+					newres = newres + line + nres[index] + "\n"
+					line = ""
+				} else {
+					line = line + nres[index]
+				}
+			} else {
+				newres = newres + nres[index] + "\n"
+			}
+		} else {
+			newres = newres + nres[index] + "\n"
+		}
+	}
+	return newres
+}
+
 const ArrayBufferToString = arrayBuffer => {
   let binaryString = '',
     bytes = new Uint8Array(arrayBuffer),
